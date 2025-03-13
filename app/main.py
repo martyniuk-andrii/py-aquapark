@@ -23,7 +23,7 @@ class IntegerRange:
             value: int
     ) -> None:
 
-        if not isinstance(value, int | float):
+        if not isinstance(value, (int, float)):
             raise TypeError
         elif not self.min_amount <= value <= self.max_amount:
             raise ValueError
@@ -39,11 +39,10 @@ class Visitor:
             height: int | float,
             weight: int | float
     ) -> None:
-
         self.name = name
         self.age = age
-        self.weight = weight
         self.height = height
+        self.weight = weight
 
 
 class SlideLimitationValidator(ABC):
@@ -53,16 +52,15 @@ class SlideLimitationValidator(ABC):
             height: int | float,
             weight: int | float
     ) -> None:
-
         self.age = age
-        self.weight = weight
         self.height = height
+        self.weight = weight
 
 
 class ChildrenSlideLimitationValidator(SlideLimitationValidator):
     age = IntegerRange(4, 14)
-    weight = IntegerRange(20, 50)
     height = IntegerRange(80, 120)
+    weight = IntegerRange(20, 50)
 
     def __init__(
             self,
@@ -70,8 +68,7 @@ class ChildrenSlideLimitationValidator(SlideLimitationValidator):
             height: int | float,
             weight: int | float
     ) -> None:
-
-        super().__init__(age, weight, height)
+        super().__init__(age, height, weight)
 
 
 class AdultSlideLimitationValidator(SlideLimitationValidator):
@@ -85,8 +82,7 @@ class AdultSlideLimitationValidator(SlideLimitationValidator):
             height: int | float,
             weight: int | float
     ) -> None:
-
-        super().__init__(age, weight, height)
+        super().__init__(age, height, weight)
 
 
 class Slide:
@@ -101,7 +97,7 @@ class Slide:
 
     def can_access(self, visitor: Visitor) -> bool:
         try:
-            self.limitation_class(visitor.age, visitor.weight, visitor.height)
+            self.limitation_class(visitor.age, visitor.height, visitor.weight)
             return True
         except (TypeError, ValueError):
             return False
