@@ -31,18 +31,6 @@ class IntegerRange:
             setattr(instance, self.protected_name, value)
 
 
-class SlideLimitationValidator(ABC):
-    def __init__(
-            self,
-            age: int,
-            height: int | float,
-            weight: int | float
-    ) -> None:
-        self.age = age
-        self.weight = weight
-        self.height = height
-
-
 class Visitor:
     def __init__(
             self,
@@ -51,7 +39,21 @@ class Visitor:
             height: int | float,
             weight: int | float
     ) -> None:
+
         self.name = name
+        self.age = age
+        self.weight = weight
+        self.height = height
+
+
+class SlideLimitationValidator(ABC):
+    def __init__(
+            self,
+            age: int,
+            height: int | float,
+            weight: int | float
+    ) -> None:
+
         self.age = age
         self.weight = weight
         self.height = height
@@ -68,6 +70,7 @@ class ChildrenSlideLimitationValidator(SlideLimitationValidator):
             height: int | float,
             weight: int | float
     ) -> None:
+
         super().__init__(age, weight, height)
 
 
@@ -82,6 +85,7 @@ class AdultSlideLimitationValidator(SlideLimitationValidator):
             height: int | float,
             weight: int | float
     ) -> None:
+
         super().__init__(age, weight, height)
 
 
@@ -91,6 +95,7 @@ class Slide:
             name: str,
             limitation_class: type[SlideLimitationValidator]
     ) -> None:
+
         self.name = name
         self.limitation_class = limitation_class
 
@@ -98,5 +103,5 @@ class Slide:
         try:
             self.limitation_class(visitor.age, visitor.weight, visitor.height)
             return True
-        except  (TypeError, ValueError):
+        except (TypeError, ValueError):
             return False
